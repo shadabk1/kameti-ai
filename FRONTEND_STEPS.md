@@ -85,6 +85,17 @@ PayPal Sandbox, trust score + dashboard, Gemini keys, video + Devpost.
   server.js Gemini debug logging on failure.
 - Note: Sumeet changed the Gemini model to 'gemini-3.8-flash' — verify that model name with a Gemini key before relying on live Gemini; without a key the app falls back to simulated explanations anyway.
 
+## v10 — Friend couldn't create a group (2026-11-10)
+- Bug: demo members started with 3 of 5 already paid, so circleStarted was true on
+  first load for every new visitor. All Create-group inputs were disabled, and the
+  only Start-a-new-circle button appeared after the circle was complete — so a
+  friend / judge could never create their own group.
+- Fix: demo members now all start unpaid (paidThisMonth: false), so Create your group
+  is open on first load. Added a "Start a new circle" button in the setup section
+  whenever the circle is running, so anyone can reset and unlock the form.
+- Also bumped the saved-members key to kameti-members-v2, so returning visitors
+  don't load the old paid demo state from localStorage.
+
 ## v9 — Backend URL fix (2026-11-10, caught by Sumeet's Muse)
 - Problem: src/api.js hardcoded http://localhost:3001. Vercel only hosts the frontend,
   it never runs server/server.js, so live PayPal/Gemini keys added to Vercel did nothing —

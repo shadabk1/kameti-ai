@@ -5,7 +5,7 @@ import { createPayPalOrder, explainTrustScore, getServerMode, payOutViaServer } 
 
 function loadSavedMembers() {
   try {
-    const saved = JSON.parse(localStorage.getItem('kameti-members-v1') || 'null')
+    const saved = JSON.parse(localStorage.getItem('kameti-members-v2') || 'null')
     if (Array.isArray(saved) && saved.length) return saved
   } catch {}
   return demoMembers
@@ -74,7 +74,7 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    try { localStorage.setItem('kameti-members-v1', JSON.stringify(members)) } catch {}
+    try { localStorage.setItem('kameti-members-v2', JSON.stringify(members)) } catch {}
   }, [members])
 
   useEffect(() => {
@@ -374,6 +374,11 @@ export default function App() {
           <button className="button" type="submit" disabled={circleStarted}>Add member</button>
         </form>
         {circleStarted && <p className="hint">Members and amount are locked while the circle is running. Start a new circle to change them.</p>}
+        {circleStarted && (
+          <button className="button" type="button" onClick={startNewCircle}>
+            Start a new circle
+          </button>
+        )}
       </section>
 
       <section className="stats">
