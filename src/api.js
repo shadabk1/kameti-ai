@@ -1,6 +1,10 @@
 import { simulatePayPalPayment, simulatePayout } from './paypal.js'
 
-const SERVER_URL = 'http://localhost:3001'
+// Backend URL: set VITE_SERVER_URL in Vercel to your Render backend URL,
+// e.g. https://kameti-ai-server.onrender.com
+// Falls back to localhost:3001 for local dev (npm run server).
+// Without a backend, all calls fall back to simulated mode.
+const SERVER_URL = (import.meta.env.VITE_SERVER_URL || 'http://localhost:3001').replace(/\/$/, '')
 
 // Payout receiver for the Live Sandbox test.
 // PayPal Sandbox rejects payouts to a fake @example.com address.

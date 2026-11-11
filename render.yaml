@@ -1,0 +1,20 @@
+# Render free backend for Kameti AI — deploys server/server.js
+# In Render: New > Blueprint, point it at the repo, or New > Web Service
+# with Build Command `npm install` and Start Command `node server/server.js`.
+# Set these in Render > Environment Variables (never in the repo):
+#   PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, GEMINI_API_KEY
+# Render gives you a URL like https://kameti-ai-server.onrender.com
+# Put that URL in Vercel as VITE_SERVER_URL, then Redeploy the frontend.
+services:
+  - type: web
+    name: kameti-ai-server
+    env: node
+    buildCommand: npm install
+    startCommand: node server/server.js
+    envVars:
+      - key: PAYPAL_CLIENT_ID
+        sync: false
+      - key: PAYPAL_CLIENT_SECRET
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false

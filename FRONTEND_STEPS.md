@@ -84,3 +84,18 @@ PayPal Sandbox, trust score + dashboard, Gemini keys, video + Devpost.
   PAYOUT_EMAIL in api.js (set to your Sandbox Personal test email, or leave '' for simulated),
   server.js Gemini debug logging on failure.
 - Note: Sumeet changed the Gemini model to 'gemini-3.8-flash' — verify that model name with a Gemini key before relying on live Gemini; without a key the app falls back to simulated explanations anyway.
+
+## v9 — Backend URL fix (2026-11-10, caught by Sumeet's Muse)
+- Problem: src/api.js hardcoded http://localhost:3001. Vercel only hosts the frontend,
+  it never runs server/server.js, so live PayPal/Gemini keys added to Vercel did nothing —
+  the live link stayed Simulated / rule-based.
+- Fix: api.js now uses VITE_SERVER_URL (import.meta.env) with fallback to localhost:3001.
+- Added render.yaml for a free Render backend (node, npm install, node server/server.js).
+  Put PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, GEMINI_API_KEY in Render env vars only.
+- Deploy: 1) Render backend, get its URL. 2) Vercel frontend: set only
+  VITE_SERVER_URL=https://kameti-ai-server.onrender.com, Redeploy.
+  Then the live link should say Live Sandbox / Live Gemini.
+- Fallback if Render is too much before Thu: film the video locally on localhost
+  where Live Sandbox / Live Gemini already work; Vercel link can stay simulated-only.
+- Supabase: still NOT wired in — only src/supabase.js scaffold, members from demoData.js.
+  Do not add Supabase env vars yet.
