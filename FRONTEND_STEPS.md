@@ -77,3 +77,10 @@ PayPal Sandbox, trust score + dashboard, Gemini keys, video + Devpost.
   Each month takes the next person in that order. No one wins twice until everyone has won once.
 - Demo only: Reminders list now says "Simulate payment" for other members, so judges can
   still unlock the payout in the demo. That is clearly labelled demo, not you paying them.
+
+## v8 — Merged Sumeet's changes (2026-11-10)
+- Sumeet's zip (kameti-ai__2.zip) was starter + his changes only — do NOT deploy it alone, it has no homepage/duration/random-winner/v7 polish.
+- Merged into v7: predictNextMonthRisk() in trustScore.js, "Next month risk" line on each member card,
+  PAYOUT_EMAIL in api.js (set to your Sandbox Personal test email, or leave '' for simulated),
+  server.js Gemini debug logging on failure.
+- Note: Sumeet changed the Gemini model to 'gemini-3.8-flash' — verify that model name with a Gemini key before relying on live Gemini; without a key the app falls back to simulated explanations anyway.

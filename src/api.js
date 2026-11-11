@@ -2,6 +2,13 @@ import { simulatePayPalPayment, simulatePayout } from './paypal.js'
 
 const SERVER_URL = 'http://localhost:3001'
 
+// Payout receiver for the Live Sandbox test.
+// PayPal Sandbox rejects payouts to a fake @example.com address.
+// Set this to your Sandbox Personal test account email, e.g.
+// 'sb-xxxxx@personal.example.com' (from developer.paypal.com > Sandbox > Accounts > Personal).
+// Leave it as '' to use the demo-generated address (simulated / may fail in Live Sandbox).
+const PAYOUT_EMAIL = ''
+
 async function postJson(path, body) {
   const response = await fetch(`${SERVER_URL}${path}`, {
     method: 'POST',
@@ -43,7 +50,7 @@ export async function createPayPalOrder(member, amount) {
 export async function payOutViaServer(winner, pot) {
   try {
     const data = await postJson('/api/paypal/payout', {
-      email: `${winner.name.toLowerCase().replace(/[^a-z0-9]+/g, '.')}@example.com`,
+      email: PAYOUT_EMAIL || `${winner.name.toLowerCase().replace(/[^a-z0-9]+/g, '.')}@example.com`,
       amount: pot
     })
     if (!data.ok) throw new Error('Payout failed')

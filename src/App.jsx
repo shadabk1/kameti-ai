@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { demoMembers } from './demoData.js'
-import { circleHealth, trustScore } from './trustScore.js'
+import { circleHealth, predictNextMonthRisk, trustScore } from './trustScore.js'
 import { createPayPalOrder, explainTrustScore, getServerMode, payOutViaServer } from './api.js'
 
 function loadSavedMembers() {
@@ -482,6 +482,7 @@ export default function App() {
         <div className="members">
           {members.map((member) => {
             const trust = trustScore(member.history)
+            const nextMonth = predictNextMonthRisk(member.history)
             const riskClass = trust.score >= 80 ? 'low' : trust.score >= 55 ? 'medium' : 'high'
             const aiText = explanations[member.id]
             const aiSource = explanationSource[member.id]
@@ -507,6 +508,9 @@ export default function App() {
                 {explainingId === member.id && <p className="hint">Asking Gemini…</p>}
                 <p className="counts">
                   {trust.onTime} on time · {trust.late} late · {trust.missed} missed
+                </p>
+                <p className="counts">
+                  Next month risk: {nextMonth.risk} — {nextMonth.reason}
                 </p>
                 <p className="status">
                   {member.paidThisMonth ? 'Paid this month' : 'Not paid this month'}

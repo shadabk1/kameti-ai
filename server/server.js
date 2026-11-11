@@ -8,7 +8,7 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 3001
 const PAYPAL_BASE = 'https://api-m.sandbox.paypal.com'
-const GEMINI_MODEL = 'gemini-2.0-flash'
+const GEMINI_MODEL = 'gemini-3.8-flash'
 
 app.use(cors())
 app.use(express.json())
@@ -189,12 +189,14 @@ app.post('/api/ai/explain', async (req, res) => {
     )
     const data = await response.json()
     if (!response.ok) {
+      console.error('Gemini API failed:', response.status, data?.error?.message || JSON.stringify(data).slice(0, 300))
       return res.json({
         ok: true,
         mode: 'simulated',
         explanation: trust.reason,
         score: finalScore,
-        risk: trust.risk
+        risk: trust.risk,
+        debug: `Gemini ${response.status}: ${data?.error?.message || 'request failed'}`
       })
     }
     const text = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim()

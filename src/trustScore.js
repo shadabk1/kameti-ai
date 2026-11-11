@@ -27,3 +27,17 @@ export function circleHealth(members) {
   const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0
   return avg
 }
+
+export function predictNextMonthRisk(history) {
+  if (!history || history.length === 0) {
+    return { risk: 'Unknown', reason: 'No payment history yet — cannot predict next month.' }
+  }
+  const lastTwo = history.slice(-2)
+  if (lastTwo.includes('missed')) {
+    return { risk: 'High', reason: 'Missed a payment in the last 2 months — most at risk next month.' }
+  }
+  const { score } = trustScore(history)
+  if (score >= 80) return { risk: 'Low', reason: 'Strong payment history — very likely to pay on time next month.' }
+  if (score >= 55) return { risk: 'Medium', reason: 'Mixed history — may pay late next month.' }
+  return { risk: 'High', reason: 'Low trust score — at risk of missing next month.' }
+}
